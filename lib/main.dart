@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Add this import
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    precacheImage(AssetImage("assets/railway1.jpg"), context); // Precache the image
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 112, 103, 243)),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'RSTBS QR Code Reader'),
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({Key? key, required this.title});
 
   final String title;
 
@@ -31,12 +32,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  void _navigateToScanPage() {
+    // Navigate to the scan page
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ScanPage()),
+    );
   }
 
   @override
@@ -44,26 +45,51 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Welcome to Railway Season Ticket Booking System',
-            ),
-           Text(
-              '$_counter',
-               style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        title: Text(
+          widget.title,
+          style: TextStyle(fontWeight: FontWeight.bold), // Apply bold font weight
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/railway1.jpg"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: _navigateToScanPage,
+              style: ElevatedButton.styleFrom(
+                textStyle: TextStyle(
+                  fontWeight: FontWeight.bold, // Make text bold
+                  fontSize: 20, // Increase font size
+                ),
+              ),
+              child: Text('Check QR Updates'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ScanPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('QR Scan'),
+      ),
+      body: Center(
+        child: Text('This is the QR Scan page'),
       ),
     );
   }
