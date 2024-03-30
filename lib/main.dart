@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Add this import
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,11 +32,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _navigateToScanPage() {
-    // Navigate to the scan page
+  void _navigateToScanPage() async {
+    // Get the scanned QR code result
+    String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
+      '#ff6666', // Customize the scanner overlay color
+      'Cancel', // Text for the cancel button
+      true, // Enable flash
+      ScanMode.QR, // Specify the scan mode (QR code in this case)
+    );
+
+    // Navigate to a new page to display the scanned message
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ScanPage()),
+      MaterialPageRoute(
+        builder: (context) => ScanResultPage(result: barcodeScanResult),
+      ),
     );
   }
 
@@ -81,15 +91,33 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class ScanPage extends StatelessWidget {
+class ScanResultPage extends StatelessWidget {
+  final String result;
+
+  const ScanResultPage({Key? key, required this.result}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('QR Scan'),
+        title: Text('Scanned Result'),
       ),
       body: Center(
-        child: Text('This is the QR Scan page'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Scanned Message:', style: TextStyle(fontSize: 20)),
+            SizedBox(height: 10),
+            Text(result, style: TextStyle(fontSize: 18)),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.popUntil(context, ModalRoute.withName('/'));
+              },
+              child: Text('Go Back to First Page'),
+            ),
+          ],
+        ),
       ),
     );
   }
