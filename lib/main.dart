@@ -30,6 +30,9 @@ class MyApp extends StatelessWidget {
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final TextEditingController usernameController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('RSTBS QR Code Reader'),
@@ -63,6 +66,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   TextField(
+                    controller: usernameController,
                     decoration: InputDecoration(
                       hintText: 'Enter your username',
                       border: OutlineInputBorder(),
@@ -75,6 +79,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   TextField(
+                    controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: 'Enter your password',
@@ -84,13 +89,31 @@ class LoginPage extends StatelessWidget {
                   SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/main');
+                      // Hardcoded username and password for validation
+                      if (usernameController.text.trim() == 'test' &&
+                          passwordController.text.trim() == 'test') {
+                        Navigator.pushReplacementNamed(context, '/main');
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Invalid Credentials'),
+                            content: Text('Please enter correct username and password.'),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 214, 208, 208), // Grey button color
-                      textStyle: TextStyle(fontSize: 20),
+                      backgroundColor: Colors.grey[300], // Grey button color
+                      textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    child: Text('Login', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                    child: Text('Login'),
                   ),
                 ],
               ),
@@ -101,6 +124,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title});
