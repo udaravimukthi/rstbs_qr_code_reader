@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    precacheImage(AssetImage("assets/railway1.jpg"), context); // Precache the image
+    precacheImage(AssetImage("assets/railway1.jpg"), context);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -52,7 +52,7 @@ class LoginPage extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.8,
               height: 380,
               decoration: BoxDecoration(
-                color: Colors.grey[200], // Grey background color
+                color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(10),
               ),
               padding: const EdgeInsets.all(40),
@@ -89,7 +89,7 @@ class LoginPage extends StatelessWidget {
                   SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () {
-                      // Hardcoded username and password for validation
+                      //username and password for validation
                       if (usernameController.text.trim() == 'test' &&
                           passwordController.text.trim() == 'test') {
                         Navigator.pushReplacementNamed(context, '/main');
@@ -110,7 +110,7 @@ class LoginPage extends StatelessWidget {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey[300], // Grey button color
+                      backgroundColor: Colors.grey[300],
                       textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     child: Text('Login'),
@@ -139,10 +139,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void _navigateToScanPage() async {
     // Get the scanned QR code result
     String barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
-      '#ff6666', // Customize the scanner overlay color
-      'Cancel', // Text for the cancel button
-      true, // Enable flash
-      ScanMode.QR, // Specify the scan mode (QR code in this case)
+      '#ff6666',
+      'Cancel',
+      true,
+      ScanMode.QR,
     );
 
     // Navigate to a new page to display the scanned message
@@ -152,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context) => ScanResultPage(result: barcodeScanResult),
     ),
   ).then((_) {
-    // After the ScanResultPage is popped, check if we should navigate back to login/signup
+    
     if (!ModalRoute.of(context)!.isCurrent) {
       Navigator.popUntil(context, ModalRoute.withName('/'));
     }
@@ -166,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(
           widget.title,
-          style: TextStyle(fontWeight: FontWeight.bold), // Apply bold font weight
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -195,8 +195,8 @@ class _MyHomePageState extends State<MyHomePage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 203, 192, 192),
                 textStyle: TextStyle(
-                  fontWeight: FontWeight.bold, // Make text bold
-                  fontSize: 24, // Increase font size
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
                 ),
               ),
               child: Text('QR Scan'),
@@ -221,11 +221,11 @@ class ScanResultPage extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          // Background Image
+          
           Positioned.fill(
             child: Image.asset(
-              'assets/railway1.jpg', // Path to your background image
-              fit: BoxFit.cover, // Cover the entire screen
+              'assets/railway1.jpg',
+              fit: BoxFit.cover,
             ),
           ),
           Center(
