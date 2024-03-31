@@ -17,7 +17,87 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 112, 103, 243)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'RSTBS QR Code Reader'),
+      // Define routes for navigation
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginPage(), // Login/signup page route
+        '/main': (context) => MyHomePage(title: 'RSTBS QR Code Reader'), // Main page route
+      },
+    );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('RSTBS QR Code Reader'),
+      ),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/railway1.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: 380,
+              decoration: BoxDecoration(
+                color: Colors.grey[200], // Grey background color
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.all(40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Username',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Enter your username',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Password',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  TextField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: 'Enter your password',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, '/main');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 214, 208, 208), // Grey button color
+                      textStyle: TextStyle(fontSize: 20),
+                    ),
+                    child: Text('Login', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -43,11 +123,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Navigate to a new page to display the scanned message
     Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ScanResultPage(result: barcodeScanResult),
-      ),
-    );
+    context,
+    MaterialPageRoute(
+      builder: (context) => ScanResultPage(result: barcodeScanResult),
+    ),
+  ).then((_) {
+    // After the ScanResultPage is popped, check if we should navigate back to login/signup
+    if (!ModalRoute.of(context)!.isCurrent) {
+      Navigator.popUntil(context, ModalRoute.withName('/'));
+    }
+  });
   }
 
   @override
@@ -59,10 +144,16 @@ class _MyHomePageState extends State<MyHomePage> {
           widget.title,
           style: TextStyle(fontWeight: FontWeight.bold), // Apply bold font weight
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // Navigate to the login/signup page
+            Navigator.pushReplacementNamed(context, '/');
+          },
+        ),
       ),
       body: Column(
         children: [
-
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -81,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 backgroundColor: Color.fromARGB(255, 203, 192, 192),
                 textStyle: TextStyle(
                   fontWeight: FontWeight.bold, // Make text bold
-                  fontSize: 28, // Increase font size
+                  fontSize: 24, // Increase font size
                 ),
               ),
               child: Text('QR Scan'),
@@ -119,7 +210,6 @@ class ScanResultPage extends StatelessWidget {
               children: [
                 SizedBox(height: 100),
                 Container(
-                  // padding: EdgeInsets.all(8),
                   height: 40,
                   width: 390,
                   color: Color.fromARGB(255, 48, 150, 233),
@@ -130,34 +220,32 @@ class ScanResultPage extends StatelessWidget {
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                   ),
-                ), // Add spacing
-                // Result Container
+                ),
                 Container(
                   padding: EdgeInsets.all(8),
                   height: 330,
                   width: 390,
                   color: Color.fromARGB(255, 212, 217, 220),
                   child: Center(
-                  child: OverflowBox(
-                    maxWidth: double.infinity,
-                    maxHeight: double.infinity,
-                    child: Text(
-                      result,
-                      textAlign: TextAlign.center, // Center-align the text
-                      style: TextStyle(fontSize: 18, color: Color.fromARGB(255, 23, 23, 23)),
+                    child: OverflowBox(
+                      maxWidth: double.infinity,
+                      maxHeight: double.infinity,
+                      child: Text(
+                        result,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 18, color: Color.fromARGB(255, 23, 23, 23)),
+                      ),
                     ),
                   ),
                 ),
-                ),
-                SizedBox(height: 220), // Add spacing
-                // Go Back Container
+                SizedBox(height: 220),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                    Navigator.popUntil(context, ModalRoute.withName('/main'));
                   },
                   style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all<Size>(
-                      Size(280, 50), // Adjust width and height as needed
+                      Size(280, 50),
                     ),
                     backgroundColor: MaterialStateProperty.all<Color>(
                       const Color.fromARGB(255, 160, 194, 222),
@@ -181,7 +269,7 @@ class ScanResultPage extends StatelessWidget {
                 ),
               ],
             ),
-         ),
+          ),
         ],
       ),
     );
