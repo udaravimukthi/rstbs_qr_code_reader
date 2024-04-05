@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 112, 103, 243)),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 19, 3, 241)),
         useMaterial3: true,
       ),
       // Define routes for navigation
@@ -35,7 +35,8 @@ class LoginPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('RSTBS QR Code Reader'),
+        title: Text('RSTBS QR Code Reader', style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Color.fromARGB(255, 177, 173, 244),
       ),
       body: Stack(
         children: [
@@ -217,7 +218,8 @@ class ScanResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scanned Result'),
+        title: Text('Scanned Result', style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Color.fromARGB(255, 177, 173, 244),
       ),
       body: Stack(
         children: [
@@ -235,7 +237,7 @@ class ScanResultPage extends StatelessWidget {
                 SizedBox(height: 100),
                 Container(
                   height: 40,
-                  width: 390,
+                  width: 350,
                   color: Color.fromARGB(255, 48, 150, 233),
                   child: Center(
                     child: Text(
@@ -248,7 +250,7 @@ class ScanResultPage extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(8),
                   height: 330,
-                  width: 390,
+                  width: 350,
                   color: Color.fromARGB(255, 212, 217, 220),
                   child: Center(
                     child: OverflowBox(
@@ -262,7 +264,7 @@ class ScanResultPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 220),
+                SizedBox(height: 150),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.popUntil(context, ModalRoute.withName('/main'));
