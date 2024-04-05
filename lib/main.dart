@@ -176,6 +176,32 @@ class _MyHomePageState extends State<MyHomePage> {
             Navigator.pushReplacementNamed(context, '/');
           },
         ),
+        actions: [
+          PopupMenuButton<int>(
+            icon: CircleAvatar(
+              radius: 24,
+              backgroundImage: AssetImage("assets/profileUpdated.jpg"),
+            ),
+            offset: Offset(0, 50), // Adjust the vertical offset as needed
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+              const PopupMenuItem<int>(
+                value: 1,
+                child: Text('Profile'),
+              ),
+              const PopupMenuItem<int>(
+                value: 2,
+                child: Text('LogOut'),
+              ),
+            ],
+            onSelected: (int value) {
+              if (value == 2) {
+                Navigator.pushReplacementNamed(context, '/');
+              } else {
+                
+              }
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -218,7 +244,36 @@ class ScanResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scanned Result', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Row(
+          children: [
+            Expanded(
+              child: Text('Scanned Result', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+            PopupMenuButton<int>(
+              icon: CircleAvatar(
+                radius: 24,
+                backgroundImage: AssetImage("assets/profileUpdated.jpg"),
+              ),
+              offset: Offset(0, 50), // Adjust the vertical offset as needed
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                const PopupMenuItem<int>(
+                  value: 1,
+                  child: Text('Profile'),
+                ),
+                const PopupMenuItem<int>(
+                  value: 2,
+                  child: Text('LogOut'),
+                ),
+              ],
+              onSelected: (int value) {
+                if (value == 2) {
+                  Navigator.pushReplacementNamed(context, '/');
+                } else {
+                }
+              },
+            ),
+          ],
+        ),
         backgroundColor: Color.fromARGB(255, 177, 173, 244),
       ),
       body: Stack(
