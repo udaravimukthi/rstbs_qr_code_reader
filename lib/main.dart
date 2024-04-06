@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -225,11 +228,26 @@ class _MyHomePageState extends State<MyHomePage> {
       ScanMode.QR,
     );
 
-    // Navigate to a new page to display the scanned message
+    var response = await http.get(Uri.parse('http://192.168.8.166:8000/v1/api/season-tickets/active/`${barcodeScanResult}`'));
+
+    var responseBody = jsonDecode(response.body);
+    print(response.statusCode);
+
+    var finalResult;
+
+    if(response.statusCode == 400){
+      var message = responseBody['message'];
+      print(message);
+      finalResult = message;
+
+    } else{
+      var responseBody = response.body;
+      finalResult = responseBody;
+    }
     Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => ScanResultPage(result: barcodeScanResult),
+      builder: (context) => ScanResultPage(result: finalResult),
     ),
   ).then((_) {
     
@@ -400,7 +418,7 @@ class ScanResultPage extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 Padding(
-                  padding: EdgeInsets.only(left: 86),
+                  padding: EdgeInsets.only(left: 70),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: ElevatedButton(
@@ -439,7 +457,7 @@ class ScanResultPage extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 110),
+                SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.popUntil(context, ModalRoute.withName('/main'));
