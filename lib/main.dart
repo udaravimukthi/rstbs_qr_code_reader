@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -359,8 +360,20 @@ class ScanResultPage extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle Verify Season Ticket button action
+                      onPressed: () async {
+                        var url = Uri.parse('http://localhost:8000/v1/api/season-tickets-usage');
+                        var body = {'seasonTicketId': '2324243234'};
+
+                        var response = await http.post(
+                          url,
+                          body: body,
+                        );
+
+                        if (response.statusCode == 200) {
+                          print('Season ticket usage verified successfully.');
+                        } else {
+                          print('Error verifying season ticket usage: ${response.statusCode}');
+                        }
                       },
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all<Size>(
