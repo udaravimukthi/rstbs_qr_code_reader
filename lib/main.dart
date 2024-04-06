@@ -38,11 +38,55 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController otpController = TextEditingController();
   bool showOTPField = false;
 
+  Future<void> login(String email) async {
+    var url = Uri.parse('http://192.168.8.166:8000/v1/api/auth/checker-login');
+    var response = await http.post(
+      url,
+      body: {'email': email},
+    );
+
+    if (response.statusCode == 200) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Login Successful'),
+          content: Text('You have successfully logged in.'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/main');
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Login Failed'),
+          content: Text('Failed to log in. Please try again.'),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('RSTBS QR Code Reader', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          'RSTBS QR Code Reader',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Color.fromARGB(255, 177, 173, 244),
       ),
       body: Stack(
@@ -113,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         // Check if OTP is correct (hardcoded for simplicity)
                         if (otpController.text.trim() == '0000') {
-                          Navigator.pushReplacementNamed(context, '/main');
+                          login(usernameController.text.trim());
                         } else {
                           showDialog(
                             context: context,
@@ -361,7 +405,7 @@ class ScanResultPage extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: ElevatedButton(
                       onPressed: () async {
-                        var url = Uri.parse('http://localhost:8000/v1/api/season-tickets-usage');
+                        var url = Uri.parse('http://192.168.8.166:8000/v1/api/season-tickets-usage');
                         var body = {'seasonTicketId': '2324243234'};
 
                         var response = await http.post(
