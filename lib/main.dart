@@ -235,14 +235,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var finalResult;
 
-    if(response.statusCode == 400){
+    if (response.statusCode == 200) {
+      var duration = responseBody['duration'];
+      var stations = responseBody['applicationId']['stations'];
+      var start = duration['start'];
+      var end = duration['end'];
+      var origin = stations['origin'];
+      var destination = stations['destination'];
+
+      finalResult = '''
+      Duration:
+      Start: $start
+      End: $end
+      
+      Stations:
+      Origin: $origin
+      Destination: $destination
+      ''';
+    } else if (response.statusCode == 400) {
       var message = responseBody['message'];
       print(message);
       finalResult = message;
-
-    } else{
-      var responseBody = response.body;
+    } else {
+       var responseBody = response.body;
       finalResult = responseBody;
+
     }
     Navigator.push(
     context,
