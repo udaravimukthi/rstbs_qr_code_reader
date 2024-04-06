@@ -27,12 +27,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
+  bool showOTPField = false;
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController usernameController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(
         title: Text('RSTBS QR Code Reader', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -51,7 +57,7 @@ class LoginPage extends StatelessWidget {
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.8,
-              height: 380,
+              height: 325,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(10),
@@ -61,61 +67,88 @@ class LoginPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Username',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  TextField(
-                    controller: usernameController,
-                    decoration: InputDecoration(
-                      hintText: 'Enter your username',
-                      border: OutlineInputBorder(),
+                  if (!showOTPField) ...[
+                    Text(
+                      'Username',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'Password',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: 'Enter your password',
-                      border: OutlineInputBorder(),
+                    SizedBox(height: 8),
+                    TextField(
+                      controller: usernameController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your username',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () {
-                      //username and password for validation
-                      if (usernameController.text.trim() == 'test' &&
-                          passwordController.text.trim() == 'test') {
-                        Navigator.pushReplacementNamed(context, '/main');
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text('Invalid Credentials'),
-                            content: Text('Please enter correct username and password.'),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text('OK'),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey[300],
-                      textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          showOTPField = true;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey[300],
+                        textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      child: Text('Login'),
                     ),
-                    child: Text('Login'),
-                  ),
+                  ],
+                  if (showOTPField) ...[
+                    Text(
+                      'OTP',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    TextField(
+                      controller: otpController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter OTP',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Check if OTP is correct (hardcoded for simplicity)
+                        if (otpController.text.trim() == '0000') {
+                          Navigator.pushReplacementNamed(context, '/main');
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Invalid OTP'),
+                              content: Text('Please enter correct OTP.'),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey[300],
+                        textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      child: Text('Verify OTP'),
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          showOTPField = false;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey[300],
+                        textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      child: Text('Go back'),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -125,6 +158,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
+
 
 
 class MyHomePage extends StatefulWidget {
