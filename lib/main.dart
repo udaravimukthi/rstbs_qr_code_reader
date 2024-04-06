@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   bool showOTPField = false;
 
   Future<void> login(String email) async {
-    var url = Uri.parse('http://192.168.8.166:8000/v1/api/auth/checker-login');
+    var url = Uri.parse('http://localhost:8000/v1/api/auth/checker-login');
     var response = await http.post(
       url,
       body: {'email': email},
@@ -228,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ScanMode.QR,
     );
 
-    var response = await http.get(Uri.parse('http://192.168.8.166:8000/v1/api/season-tickets/active/`${barcodeScanResult}`'));
+    var response = await http.get(Uri.parse('http://localhost:8000/v1/api/season-tickets/active/`${barcodeScanResult}`'));
 
     var responseBody = jsonDecode(response.body);
     print(response.statusCode);
@@ -423,7 +423,7 @@ class ScanResultPage extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: ElevatedButton(
                       onPressed: () async {
-                        var url = Uri.parse('http://192.168.8.166:8000/v1/api/season-tickets-usage');
+                        var url = Uri.parse('http://localhost:8000/v1/api/season-tickets-usage');
                         var body = {'seasonTicketId': '2324243234'};
 
                         var response = await http.post(
