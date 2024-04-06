@@ -303,6 +303,7 @@ class ScanResultPage extends StatelessWidget {
                 if (value == 2) {
                   Navigator.pushReplacementNamed(context, '/');
                 } else {
+                  // Handle Profile option
                 }
               },
             ),
@@ -312,7 +313,6 @@ class ScanResultPage extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          
           Positioned.fill(
             child: Image.asset(
               'assets/railway1.jpg',
@@ -353,14 +353,43 @@ class ScanResultPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 150),
+                SizedBox(height: 5),
+                Padding(
+                  padding: EdgeInsets.only(left: 86),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle Verify Season Ticket button action
+                      },
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all<Size>(
+                          Size(239, 20),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.grey[500]!,
+                        ),
+                      ),
+                      child: Text(
+                        'Verify Season Ticket',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 110),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.popUntil(context, ModalRoute.withName('/main'));
                   },
                   style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all<Size>(
-                      Size(280, 50),
+                      Size(240, 35),
                     ),
                     backgroundColor: MaterialStateProperty.all<Color>(
                       const Color.fromARGB(255, 160, 194, 222),
