@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
   bool showOTPField = false;
 
   Future<void> login(String email) async {
-    var url = Uri.parse('http://localhost:8000/v1/api/auth/checker-login');
+    var url = Uri.parse('https://rstbs-be.onrender.com/v1/api/auth/checker-login');
     var response = await http.post(
       url,
       body: {'email': email},
@@ -228,7 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ScanMode.QR,
     );
 
-    var response = await http.get(Uri.parse('http://localhost:8000/v1/api/season-tickets/active/`${barcodeScanResult}`'));
+    var response = await http.get(Uri.parse('https://rstbs-be.onrender.com/v1/api/season-tickets/active/`${barcodeScanResult}`'));
 
     var responseBody = jsonDecode(response.body);
     print(response.statusCode);
@@ -243,15 +244,27 @@ class _MyHomePageState extends State<MyHomePage> {
       var origin = stations['origin'];
       var destination = stations['destination'];
 
+      DateTime startDate = DateTime.parse(start);
+      DateTime endDate = DateTime.parse(end);
+
+      DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+      String formattedStartDate = dateFormat.format(startDate);
+      String formattedEndDate = dateFormat.format(endDate);
+
       finalResult = '''
+
       Duration:
-      Start: $start
-      End: $end
+
+      Start: $formattedStartDate
+      End: $formattedEndDate
       
+
       Stations:
+
       Origin: $origin
       Destination: $destination
       ''';
+
     } else if (response.statusCode == 400) {
       var message = responseBody['message'];
       print(message);
@@ -421,16 +434,11 @@ class ScanResultPage extends StatelessWidget {
                   height: 330,
                   width: 350,
                   color: Color.fromARGB(255, 212, 217, 220),
-                  child: Center(
-                    child: OverflowBox(
-                      maxWidth: double.infinity,
-                      maxHeight: double.infinity,
-                      child: Text(
-                        result,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 18, color: Color.fromARGB(255, 23, 23, 23)),
-                      ),
-                    ),
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    result,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontSize: 18, color: Color.fromARGB(255, 23, 23, 23)),
                   ),
                 ),
                 SizedBox(height: 5),
@@ -440,7 +448,7 @@ class ScanResultPage extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: ElevatedButton(
                       onPressed: () async {
-                        var url = Uri.parse('http://localhost:8000/v1/api/season-tickets-usage');
+                        var url = Uri.parse('https://rstbs-be.onrender.com/v1/api/season-tickets-usage');
                         var body = {'seasonTicketId': '2324243234'};
 
                         var response = await http.post(
